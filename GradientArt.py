@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from MainWindow import MainWindow
 
 def load_image_grey(image_name):
     return cv2.imread(image_name, cv2.IMREAD_GRAYSCALE)
@@ -21,6 +21,37 @@ def load_image_colour(image_name, colour):
         c.append(line)
 
     return c
+
+
+def create_vector_array(gradient_x, gradient_y):
+    vector_array = []
+    for x in range(0, len(gradient_x)):
+        line = []
+        for y in range(0, len(gradient_y)):
+            entry = [gradient_x[x][y], gradient_y[x][y]]
+            line.append(entry)
+        vector_array.append(line)
+    return vector_array
+
+
+# reducing the vector array by 2 (call this more times if you want to reduce it more.
+def reduce_vector_array(array):
+    vector_array = []
+    for x in range(0, len(array), 2):
+        line = []
+        for y in range(0, len(array[x]), 2):
+            total = [0, 0]
+            total[0] += array[x][y][0]
+            total[0] += array[x+1][y][0]
+            total[0] += array[x][y+1][0]
+            total[0] += array[x+1][y+1][0]
+            total[1] += array[x][y][1]
+            total[1] += array[x+1][y][1]
+            total[1] += array[x][y+1][1]
+            total[1] += array[x+1][y+1][1]
+            line.append(total)
+        vector_array.append(line)
+    return vector_array
 
 
 if __name__ == "__main__":
@@ -48,16 +79,32 @@ if __name__ == "__main__":
     blue_x = cv2.Sobel(np.float32(image_blue), cv2.CV_32F, 1, 0, ksize=1)
     blue_y = cv2.Sobel(np.float32(image_blue), cv2.CV_32F, 0, 1, ksize=1)
 
-    cv2.imshow('Original', img)
-    cv2.imshow('Sobel vertical', gx)
-    cv2.imshow('Sobel horizontal', gy)
-    cv2.imshow('Sobel vertical red', red_x)
-    cv2.imshow('Sobel horizontal red', red_y)
-    cv2.imshow('Sobel vertical green', green_x)
-    cv2.imshow('Sobel horizontal green', green_y)
-    cv2.imshow('Sobel vertical blue', blue_x)
-    cv2.imshow('Sobel horizontal blue', blue_y)
+    red = create_vector_array(red_x, red_y)
+    green = create_vector_array(green_x, green_y)
+    blue = create_vector_array(blue_x, blue_y)
 
-    # print(gx)
-    mag, ang = cv2.cartToPolar(gx, gy)
-    cv2.waitKey(0)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
+
+    # cv2.imshow('Original', img)
+    # cv2.imshow('Sobel vertical', gx)
+    # cv2.imshow('Sobel horizontal', gy)
+    # cv2.imshow('Sobel vertical red', red_x)
+    # cv2.imshow('Sobel horizontal red', red_y)
+    # cv2.imshow('Sobel vertical green', green_x)
+    # cv2.imshow('Sobel horizontal green', green_y)
+    # cv2.imshow('Sobel vertical blue', blue_x)
+    # cv2.imshow('Sobel horizontal blue', blue_y)
+
+    # mag, ang = cv2.cartToPolar(gx, gy)
+    # cv2.waitKey(0)
+
+
+    window = MainWindow(512, 512, "Gradient art project")
+    window.main_loop()
+
