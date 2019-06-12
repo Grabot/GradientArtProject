@@ -1,0 +1,7 @@
+# to install dependencies:
+# pip install -r requirements.pip
+
+pip>=19
+opencv-python
+pyglet
+
