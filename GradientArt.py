@@ -90,6 +90,7 @@ if __name__ == "__main__":
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
+    red = reduce_vector_array(red)
 
     # cv2.imshow('Original', img)
     # cv2.imshow('Sobel vertical', gx)
@@ -104,7 +105,8 @@ if __name__ == "__main__":
     # mag, ang = cv2.cartToPolar(gx, gy)
     # cv2.waitKey(0)
 
+    draw_array = red
 
-    window = MainWindow(512, 512, "Gradient art project")
+    window = MainWindow(512, 512, draw_array, "Gradient art project")
     window.main_loop()
 
