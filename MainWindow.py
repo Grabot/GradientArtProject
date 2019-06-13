@@ -6,18 +6,41 @@ from pyglet.graphics import draw
 
 
 class MainWindow(window.Window):
-    def __init__(self, width, height, draw_array, name):
+    def __init__(self, width, height, red_array, green_array, blue_array, name):
         window.Window.__init__(self, width, height, name)
         self.height = height
         self.width = width
-        self.draw_array = draw_array
+        self.red_array = red_array
+        self.green_array = green_array
+        self.blue_array = blue_array
+
+        self.max_red = 0
+        for r1 in red_array:
+            for r2 in r1:
+                red = self.pythagoras(0, r2[0], 0, r2[1])
+                if red > self.max_red:
+                    self.max_red = red
+
+        self.max_green = 0
+        for g1 in green_array:
+            for g2 in g1:
+                green = self.pythagoras(0, g2[0], 0, g2[1])
+                if green > self.max_green:
+                    self.max_green = green
+
+        self.max_blue = 0
+        for b1 in blue_array:
+            for b2 in b1:
+                blue = self.pythagoras(0, b2[0], 0, b2[1])
+                if blue > self.max_blue:
+                    self.max_blue = blue
 
 
     def main_loop(self):
         clock.set_fps_limit(30)
 
-        step_x = self.height/len(self.draw_array)
-        step_y = self.height/len(self.draw_array[0])
+        step_x = self.height/len(self.red_array)
+        step_y = self.height/len(self.red_array[0])
 
         timer = 0
         while not self.has_exit:
@@ -31,16 +54,23 @@ class MainWindow(window.Window):
 
             gl.glLineWidth(30)
 
-            for x in range(0, len(self.draw_array)):
-                for y in range(0, len(self.draw_array[x])):
-                    glColor4f(1, 0, 0, 1)
+            # all arrays are the same size
+            for x in range(0, len(self.red_array)):
+                for y in range(0, len(self.red_array[x])):
+
+                    red = self.pythagoras(0, self.red_array[x][y][0], 0, self.red_array[x][y][1])
+                    green = self.pythagoras(0, self.green_array[x][y][0], 0, self.green_array[x][y][1])
+                    blue = self.pythagoras(0, self.blue_array[x][y][0], 0, self.blue_array[x][y][1])
+
+                    glColor4f((red/self.max_red), (green/self.max_green), (blue/self.max_green), 1)
                     x_pos = (x*step_x + (step_x/2))
                     y_pos = (y*step_y + (step_y/2))
 
-                    x_begin = x_pos-(self.draw_array[x][y][0]/2)
-                    y_begin = y_pos-(self.draw_array[x][y][1]/2)
-                    x_end = x_pos+(self.draw_array[x][y][0]/2)
-                    y_end = y_pos+(self.draw_array[x][y][1]/2)
+                    x_begin = x_pos-(self.red_array[x][y][0]/2)
+                    y_begin = y_pos-(self.red_array[x][y][1]/2)
+                    x_end = x_pos+(self.red_array[x][y][0]/2)
+                    y_end = y_pos+(self.red_array[x][y][1]/2)
+
 
                     draw(4, GL_LINES, ('v2f', (0, 0, 0, 0,
                                  x_begin, y_begin, x_end, y_end)))
@@ -50,3 +80,7 @@ class MainWindow(window.Window):
 
             glColor4f(0, 0, 0, 1.0)
             clock.tick()
+
+
+    def pythagoras(self, x_1, x_2, y_1, y_2):
+        return pow((y_2-y_1), 2) + pow((x_2-x_1), 2)
