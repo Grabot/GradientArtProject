@@ -52,25 +52,39 @@ class MainWindow(window.Window):
             gl.glEnable(gl.GL_BLEND)
             gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
 
-            gl.glLineWidth(30)
+            gl.glLineWidth(10)
 
             # all arrays are the same size
             for x in range(0, len(self.red_array)):
                 for y in range(0, len(self.red_array[x])):
 
-                    red = self.pythagoras(0, self.red_array[x][y][0], 0, self.red_array[x][y][1])
-                    green = self.pythagoras(0, self.green_array[x][y][0], 0, self.green_array[x][y][1])
-                    blue = self.pythagoras(0, self.blue_array[x][y][0], 0, self.blue_array[x][y][1])
+                    red = (self.pythagoras(0, self.red_array[x][y][0], 0, self.red_array[x][y][1])/self.max_red)
+                    green = (self.pythagoras(0, self.green_array[x][y][0], 0, self.green_array[x][y][1])/self.max_green)
+                    blue = (self.pythagoras(0, self.blue_array[x][y][0], 0, self.blue_array[x][y][1])/self.max_blue)
 
-                    glColor4f((red/self.max_red), (green/self.max_green), (blue/self.max_green), 1)
+                    if red > green and red > blue:
+                        red = red*(1/red)
+                        green = green*(1/red)
+                        blue = blue*(1/red)
+                    elif green > red and green > blue:
+                        red = red*(1/green)
+                        green = green*(1/green)
+                        blue = blue*(1/green)
+                    elif blue > red and blue > green:
+                        red = red*(1/blue)
+                        green = green*(1/blue)
+                        blue = blue*(1/blue)
+
+                    glColor4f(red, green, blue, 1)
                     x_pos = (x*step_x + (step_x/2))
                     y_pos = (y*step_y + (step_y/2))
 
-                    x_begin = x_pos-(self.red_array[x][y][0]/2)
-                    y_begin = y_pos-(self.red_array[x][y][1]/2)
-                    x_end = x_pos+(self.red_array[x][y][0]/2)
-                    y_end = y_pos+(self.red_array[x][y][1]/2)
+                    line_pos = self.red_array[x][y] + self.green_array[x][y] + self.blue_array[x][y]
 
+                    x_begin = x_pos-(line_pos[0]/2)
+                    y_begin = y_pos-(line_pos[1]/2)
+                    x_end = x_pos+(line_pos[0]/2)
+                    y_end = y_pos+(line_pos[1]/2)
 
                     draw(4, GL_LINES, ('v2f', (0, 0, 0, 0,
                                  x_begin, y_begin, x_end, y_end)))

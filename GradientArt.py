@@ -56,12 +56,13 @@ def reduce_vector_array(array):
 
 if __name__ == "__main__":
     # First we will test it with the grayscale.
-    img = load_image('Lenna.png')
-    img_grey = load_image_grey('Lenna.png')
+    image_name = 'Lenna.png'
+    img = load_image(image_name)
+    img_grey = load_image_grey(image_name)
 
-    img_red = load_image_colour('Lenna.png', 0)
-    img_green = load_image_colour('Lenna.png', 1)
-    img_blue = load_image_colour('Lenna.png', 2)
+    img_red = load_image_colour(image_name, 0)
+    img_green = load_image_colour(image_name, 1)
+    img_blue = load_image_colour(image_name, 2)
     rows, cols = img_grey.shape
 
     image = np.sqrt(img_grey)
@@ -87,18 +88,12 @@ if __name__ == "__main__":
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
-    red = reduce_vector_array(red)
-    red = reduce_vector_array(red)
 
     green = reduce_vector_array(green)
     green = reduce_vector_array(green)
     green = reduce_vector_array(green)
     green = reduce_vector_array(green)
-    green = reduce_vector_array(green)
-    green = reduce_vector_array(green)
 
-    blue = reduce_vector_array(blue)
-    blue = reduce_vector_array(blue)
     blue = reduce_vector_array(blue)
     blue = reduce_vector_array(blue)
     blue = reduce_vector_array(blue)
