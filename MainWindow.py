@@ -6,8 +6,10 @@ from pyglet.graphics import draw
 
 
 class MainWindow(window.Window):
-    def __init__(self, width, height, red_array, green_array, blue_array, name):
-        window.Window.__init__(self, width, height, name)
+    def __init__(self, rows, columns, width, height, red_array, green_array, blue_array, name):
+        window.Window.__init__(self, width+100, height+100, name)
+        self.rows = rows
+        self.columns = columns
         self.height = height
         self.width = width
         self.red_array = red_array
@@ -39,8 +41,8 @@ class MainWindow(window.Window):
     def main_loop(self):
         clock.set_fps_limit(30)
 
-        step_x = self.height/len(self.red_array)
-        step_y = self.height/len(self.red_array[0])
+        step_x = self.rows/len(self.red_array)
+        step_y = self.columns/len(self.red_array[0])
 
         timer = 0
         while not self.has_exit:
@@ -62,22 +64,22 @@ class MainWindow(window.Window):
                     green = (self.pythagoras(0, self.green_array[x][y][0], 0, self.green_array[x][y][1])/self.max_green)
                     blue = (self.pythagoras(0, self.blue_array[x][y][0], 0, self.blue_array[x][y][1])/self.max_blue)
 
-                    if red > green and red > blue:
-                        red = red*(1/red)
-                        green = green*(1/red)
-                        blue = blue*(1/red)
-                    elif green > red and green > blue:
-                        red = red*(1/green)
-                        green = green*(1/green)
-                        blue = blue*(1/green)
-                    elif blue > red and blue > green:
-                        red = red*(1/blue)
-                        green = green*(1/blue)
-                        blue = blue*(1/blue)
+                    # if red > green and red > blue:
+                    #     red = red*(1/red)
+                    #     green = green*(1/red)
+                    #     blue = blue*(1/red)
+                    # elif green > red and green > blue:
+                    #     red = red*(1/green)
+                    #     green = green*(1/green)
+                    #     blue = blue*(1/green)
+                    # elif blue > red and blue > green:
+                    #     red = red*(1/blue)
+                    #     green = green*(1/blue)
+                    #     blue = blue*(1/blue)
 
-                    glColor4f(red, green, blue, 1)
+                    glColor4f(red*2, green*2, blue*2, 1)
                     x_pos = (x*step_x + (step_x/2))
-                    y_pos = (y*step_y + (step_y/2))
+                    y_pos = self.columns-((y*step_y + (step_y/2)))
 
                     line_pos = self.red_array[x][y] + self.green_array[x][y] + self.blue_array[x][y]
 

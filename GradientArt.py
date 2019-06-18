@@ -27,7 +27,7 @@ def create_vector_array(gradient_x, gradient_y):
     vector_array = []
     for x in range(0, len(gradient_x)):
         line = []
-        for y in range(0, len(gradient_y)):
+        for y in range(0, len(gradient_x[x])):
             entry = [gradient_x[x][y], gradient_y[x][y]]
             line.append(entry)
         vector_array.append(line)
@@ -56,7 +56,7 @@ def reduce_vector_array(array):
 
 if __name__ == "__main__":
     # First we will test it with the grayscale.
-    image_name = 'Lenna.png'
+    image_name = 'frog2.png'
     img = load_image(image_name)
     img_grey = load_image_grey(image_name)
 
@@ -64,6 +64,7 @@ if __name__ == "__main__":
     img_green = load_image_colour(image_name, 1)
     img_blue = load_image_colour(image_name, 2)
     rows, cols = img_grey.shape
+    print("rows: " + str(rows) + " columns: " + str(cols))
 
     image = np.sqrt(img_grey)
     image_red = np.sqrt(img_red)
@@ -87,17 +88,17 @@ if __name__ == "__main__":
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
     red = reduce_vector_array(red)
-    red = reduce_vector_array(red)
+    # red = reduce_vector_array(red)
 
     green = reduce_vector_array(green)
     green = reduce_vector_array(green)
     green = reduce_vector_array(green)
-    green = reduce_vector_array(green)
+    # green = reduce_vector_array(green)
 
     blue = reduce_vector_array(blue)
     blue = reduce_vector_array(blue)
     blue = reduce_vector_array(blue)
-    blue = reduce_vector_array(blue)
+    # blue = reduce_vector_array(blue)
 
     # cv2.imshow('Original', img)
     # cv2.imshow('Sobel vertical', gx)
@@ -112,6 +113,6 @@ if __name__ == "__main__":
     # mag, ang = cv2.cartToPolar(gx, gy)
     # cv2.waitKey(0)
 
-    window = MainWindow(512, 512, red, green, blue, "Gradient art project")
+    window = MainWindow(cols, rows, 1024, 1024, red, green, blue, "Gradient art project")
     window.main_loop()
 
